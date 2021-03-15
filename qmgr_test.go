@@ -1,12 +1,49 @@
-# embbededqeuemgr
-Simple Queue Manager Implementaiton for Go Prgrams
+package eqm
 
+import (
+	"fmt"
+	"log"
+	"os"
+	"testing"
+	"time"
+)
 
-This simple lib uses filesystem to enqueue / dequeue messages for local usage.
+func Test_Basic(t *testing.T) {
+	os.RemoveAll("db")
+	q, err := New()
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = q.Push([]byte("entry1"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	q.Push([]byte("entry2"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	q.Push([]byte("entry3"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	bs, err := q.Peek()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(bs) != "entry1" {
+		t.Fatal("Not matching: " + string(bs) + " entry1")
+	}
 
-Portability and simplicity are priority here, not performance. Though it will work well for most of use cases.
+	for err == nil && len(bs) > 0 {
+		bs, err = q.Pop()
+		if err != nil {
+			t.Fatal(err)
+		}
+		log.Printf(string(bs))
+	}
 
-```go
+}
+
 func Test_Multi(t *testing.T) {
 	os.RemoveAll("db")
 	q, err := New()
@@ -71,4 +108,3 @@ func Test_Multi(t *testing.T) {
 	}
 
 }
-```
