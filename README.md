@@ -1,4 +1,4 @@
-# embbededqeuemgr
+# eqm - Embedded Queue Manager
 Simple Queue Manager Implementaiton for Go Prgrams
 
 
